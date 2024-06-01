@@ -1,0 +1,13 @@
+[package]
+name = "fp_decimal_type"
+version = "0.4.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+num-traits = "0.2.14"
+
+[dev-dependencies]
+rand_pcg = "0.3.1"
+rand = "0.8.4"

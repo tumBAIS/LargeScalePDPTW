@@ -1,0 +1,12 @@
+[package]
+name = "kdsp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+fixedbitset = "0.5.7"
+num-traits = "0.2.19"
+
+[dev-dependencies]
+rand = "0.8.5"
+rand_pcg = "0.3.1"
