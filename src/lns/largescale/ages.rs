@@ -80,7 +80,8 @@ impl RepairParameters {
 }
 
 pub struct Parameters {
-    pub max_iterations: usize,
+    pub max_ils_iterations: Option<usize>,
+    pub max_lns_iterations: usize,
     pub repair_order_weights: Vec<usize>,
     pub repair_blink_rate: f64,
     pub repair_insertion_limit: usize,
@@ -464,7 +465,7 @@ impl<'a> LargeNeighborhoodAGES<'a> {
                         ExponentialMetropolisCriteria::new(
                             initial_temperature,
                             final_temperature,
-                            self.params.max_iterations,
+                            self.params.max_lns_iterations,
                         ),
                         rng,
                         countdown,
@@ -479,7 +480,7 @@ impl<'a> LargeNeighborhoodAGES<'a> {
                         LinearRecordToRecordCriteria::new(
                             initial_temperature,
                             final_temperature,
-                            self.params.max_iterations,
+                            self.params.max_lns_iterations,
                         ),
                         rng,
                         countdown,
@@ -506,7 +507,7 @@ impl<'a> LargeNeighborhoodAGES<'a> {
                         ExponentialMetropolisCriteria::new(
                             initial_temperature,
                             final_temperature,
-                            self.params.max_iterations,
+                            self.params.max_lns_iterations,
                         ),
                         rng,
                         countdown,
@@ -521,7 +522,7 @@ impl<'a> LargeNeighborhoodAGES<'a> {
                         LinearRecordToRecordCriteria::new(
                             initial_temperature,
                             final_temperature,
-                            self.params.max_iterations,
+                            self.params.max_lns_iterations,
                         ),
                         rng,
                         countdown,
@@ -593,7 +594,11 @@ impl<'a> LargeNeighborhoodAGES<'a> {
                 }
             }
 
-            if countdown.is_finished() {
+            let iteration_limit_reached = if let Some(max_iterations) = self.params.max_ils_iterations {
+                current_iteration >= max_iterations
+            } else { false };
+
+            if iteration_limit_reached || countdown.is_finished() {
                 #[cfg(feature = "progress_tracking_ls_ils")]
                 {
                     tracking.track_component(ComponentTracking::ILS(ILSTrackingInfo::Finished {
@@ -667,7 +672,7 @@ impl<'a> LargeNeighborhoodAGES<'a> {
             temperature: acceptance_criterion.get_current_temperature(),
         }));
 
-        let mut pb_outer = DefaultSearchTracker::new(self.params.max_iterations as u64);
+        let mut pb_outer = DefaultSearchTracker::new(self.params.max_lns_iterations as u64);
         pb_outer.update(Some(&best_sol), None);
 
         let mut _lap = 0;
@@ -676,7 +681,7 @@ impl<'a> LargeNeighborhoodAGES<'a> {
         #[cfg(feature = "progress_tracking_ls_lns")]
         let mut last_improving_iteration = 0;
 
-        while iteration < self.params.max_iterations && !countdown.is_finished() {
+        while iteration < self.params.max_lns_iterations && !countdown.is_finished() {
             // split up the solution into several smaller ones
             let avg_nodes_per_split = self.params.avg_nodes_per_route.clone().choose(rng).unwrap();
             let splits = split_solution(
@@ -703,7 +708,7 @@ impl<'a> LargeNeighborhoodAGES<'a> {
             let until = self
                 .params
                 .nested_iterations
-                .min(self.params.max_iterations - iteration);
+                .min(self.params.max_lns_iterations - iteration);
 
             let rngs = (0..splits.len())
                 .into_iter()
@@ -890,7 +895,7 @@ impl<'a> LargeNeighborhoodAGES<'a> {
 
         let temp_start = self.params.init_temp;
         let mut current_temp = temp_start;
-        let temp_decrement_step = temp_start / (self.params.max_iterations as f64);
+        let temp_decrement_step = temp_start / (self.params.max_lns_iterations as f64);
 
         #[cfg(feature = "progress_tracking_ls_lns")]
             let timer = Timer::new();
@@ -901,7 +906,7 @@ impl<'a> LargeNeighborhoodAGES<'a> {
             temperature: current_temp,
         }));
 
-        let mut pb_outer = DefaultSearchTracker::new(self.params.max_iterations as u64);
+        let mut pb_outer = DefaultSearchTracker::new(self.params.max_lns_iterations as u64);
         pb_outer.update(Some(&best_sol), None);
 
         let mut _lap = 0;
@@ -910,11 +915,11 @@ impl<'a> LargeNeighborhoodAGES<'a> {
         #[cfg(feature = "progress_tracking_ls_lns")]
         let mut last_improving_iteration = 0;
 
-        while iteration < self.params.max_iterations && !countdown.is_finished() {
+        while iteration < self.params.max_lns_iterations && !countdown.is_finished() {
             let until = self
                 .params
                 .nested_iterations
-                .min(self.params.max_iterations - iteration);
+                .min(self.params.max_lns_iterations - iteration);
 
             let (mut new_best_sol, new_current_sol) = self.perform(
                 0,

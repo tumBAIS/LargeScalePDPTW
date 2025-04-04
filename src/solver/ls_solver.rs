@@ -51,7 +51,8 @@ pub fn ls_ages_lns(
     let mut lns_kdsp_ages = LargeNeighborhoodAGES::with_instance(
         &instance,
         crate::lns::largescale::ages::Parameters {
-            max_iterations: args.lns_iterations.clone(),
+            max_ils_iterations: args.ils_iterations.clone(),
+            max_lns_iterations: args.lns_iterations.clone(),
             repair_blink_rate: args.lns_recreate_blink_rate.clone(),
             repair_order_weights: args.lns_recreate_order_weights.clone(),
             repair_insertion_limit: args.lns_recreate_insertion_limit.clone(),

@@ -159,6 +159,8 @@ impl SolverArguments {
 pub struct SolverArguments {
     #[arg(long = "solver", value_enum, default_value = "ls-ages-lns")]
     pub variant: Solver,
+    #[arg(long)]
+    pub ils_iterations: Option<usize>,
     #[arg(long, default_value = "5000")]
     pub lns_iterations: usize,
     #[arg(long, default_value = "3600")]
