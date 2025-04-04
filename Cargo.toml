@@ -1,6 +1,6 @@
 [package]
 name = "ls-pdptw-solver"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 [features]
@@ -22,6 +22,7 @@ trace-refdata = [] # adds path information in REF data
 fleet-minimization = []
 search_assertions = [] # enables assertions regarding solution state during the search
 test-with-sartoriburiol-solutions = ["classic-pdptw"]
+relatedness-measures=[]
 
 [dependencies]
 anyhow = { version = "1.0.53", features = ["backtrace"] }

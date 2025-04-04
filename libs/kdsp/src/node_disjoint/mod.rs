@@ -158,35 +158,6 @@ where
                 .then(arcs[*a].from.cmp(&arcs[*b].from))
         });
 
-        #[cfg(feature = "graph_incoming_arcs")]
-        let (rev_arc_ids, bw_row_ptr) = {
-            let rev_arc_ids: NumIndexVec<usize> = rev_arc_ids.into_iter().collect();
-
-            let mut bw_row_ptr = num_index_vec![0; self.num_nodes + 1];
-            let mut bw_row_cnt = 0;
-
-            for (i, arc_id) in rev_arc_ids.iter().enumerate() {
-                let arc = &arcs[*arc_id];
-                if bw_row_cnt < arc.to + 1 {
-                    bw_row_ptr[arc.to] = i;
-                    bw_row_cnt = arc.to + 1;
-                }
-            }
-            bw_row_ptr[self.num_nodes] = arcs.len();
-
-            // fill uninitialized row_ptr when graph not strongly connected
-            let first_row = arcs[rev_arc_ids[0usize]].to;
-            let mut next_row_ptr = arcs.len();
-            for i in (first_row + 1..self.num_nodes).rev() {
-                if bw_row_ptr[i] == 0 {
-                    bw_row_ptr[i] = next_row_ptr;
-                } else {
-                    next_row_ptr = bw_row_ptr[i];
-                }
-            }
-            (rev_arc_ids, bw_row_ptr)
-        };
-
         SourceSinkGraph {
             num_nodes: self.num_nodes,
             source_node: if let Some(s) = self.source_node { s } else { 0 },

@@ -9,7 +9,6 @@ use crate::utils::Random;
 pub use absence_removal::AbsenceRemoval;
 pub use adjacent_string_removal::AdjacentStringRemoval;
 pub use route_removal::RouteRemoval as RandomRouteRemoval;
-pub use worst_removal::WorstRemoval;
 
 pub enum DestroyOperators<'a> {
     AdjacentStringRemoval(AdjacentStringRemoval<'a>),

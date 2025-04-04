@@ -673,17 +673,6 @@ fn get_random_block_start_node(
 
     let mut block_starts = FixedBitSet::with_capacity(instance.num_requests);
 
-    #[cfg(feature = "blocks_in_solution")]
-    loop {
-        let next = solution.succ(prev);
-        if next == instance.vn_id_of(pivot_route) + 1 {
-            break;
-        }
-        block_starts.insert(instance.request_id(next));
-        prev = solution.blocks.get_block(next).last_node_id;
-    }
-
-    #[cfg(not(feature = "blocks_in_solution"))]
     loop {
         let next = solution.succ(prev);
         if next == instance.vn_id_of(pivot_route) + 1 {
@@ -721,17 +710,6 @@ fn get_nearest_block_start_node(
             }
             break;
         } else {
-            #[cfg(feature = "blocks_in_solution")]
-            {
-                let start = solution.blocks.get_block(next).data.latest_start;
-                let delta = (start - time).abs();
-                if delta < nearest_time {
-                    nearest_start_block_node = next;
-                    nearest_time = delta;
-                }
-                prev = solution.blocks.get_block(next).last_node_id;
-            }
-            #[cfg(not(feature = "blocks_in_solution"))]
             {
                 if solution.fw_data[prev].data.current_load == 0 {
                     let start = solution.bw_data[next].data.latest_start;
@@ -1071,13 +1049,6 @@ fn create_partial_instance_and_mapped_routes_with_unassigned_requests<'a>(
         .travel_matrix
         .relabeled_subset(&partial_to_full_mapping);
 
-    #[cfg(feature = "promising-edges-only")]
-        let node_correlation = self.instance.node_correlation.relabeled_subset(
-        &nodes,
-        &partial_to_full_mapping,
-        &full_to_partial_mapping,
-    );
-
     (
         PartialInstanceStruct {
             full: instance,
@@ -1089,8 +1060,6 @@ fn create_partial_instance_and_mapped_routes_with_unassigned_requests<'a>(
                 nodes,
                 vehicles,
                 travel_matrix,
-                #[cfg(feature = "promising-edges-only")]
-                node_correlation,
             },
         },
         new_routes,
