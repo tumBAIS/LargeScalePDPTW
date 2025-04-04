@@ -1,0 +1,22 @@
+--solver ls-ages-lns
+--lns-iterations 5000
+--time-limit-in-seconds 60
+--lns-recreate-blink-rate 0.05
+--lns-recreate-order-weights 6 2 1 4 2 2
+--lns-recreate-insertion-limit 40
+--lns-ruin-measure classic
+--lns-ruin-max-cardinality 10
+--lns-ruin-alpha 0.75
+--lns-ruin-beta 0.10
+--num-destroy-range 15 15
+--nested-iterations 2500
+--avg-nodes-per-split 500 500
+--lns-init-aspiration-temp 0.0333
+--lns-final-aspiration-temp 0.0
+--aspiration-mode record-to-record
+--ls-probability 0.01
+--lns-ls-mode disabled
+--lns-ls-mode-on-new-best-sol bs
+--bs-thickness 4
+--recombine-mode kdsp-earliest
+--init parallel-insertion

@@ -28,6 +28,16 @@ the desired level, e.g., `RUST_LOG=info` to output all info-level information.
 
 Parameters are passed by CLI arguments. Run `cargo run -- --help` for a list of available options.
 
+Parameters used in the experiments can be found in the paper, and are
+available as text files to be passed by prefixing ``@`` to the corresponding filepath, e.g., 
+
+``cargo run --features=classic-pdptw --release -- --instance ./resources/instances/pdptw/n200/bar-n200-1.txt --time-limit-in-seconds 60 @./resources/parameters/benchmark.args``
+
+The parameter files are located in ``./resources/parameters/``, including
+- ``benchmark.args`` - parameters used for the classic-pdptw instances (Sartori&Buriol)
+- ``case-study.args`` - parameters used for the case-study (NYC)
+- ``matching-only.args`` parameters used to run the matching procedure
+
 ### Classic PDPTW
 
 The solver was initially designed to solve a large-scale ride-sharing problem. We applied the approach
@@ -39,7 +49,7 @@ To run the classic benchmark instances, the project needs to be built with the
 Assuming the instances are located in `./resources/instances/pdptw/` the solver can be
 run using
 
-``cargo run --features=classic-pdptw --release -- --instance ./resources/instances/pdptw/n200/bar-n200-1.txt --lns-iterations 100000 --nested-iterations 10000 --time-limit-in-seconds 60``
+``cargo run --features=classic-pdptw --release -- --instance ./resources/instances/pdptw/n200/bar-n200-1.txt --time-limit-in-seconds 60 @./resources/parameters/benchmark.args``
 
 ### New instance set based on the NYC data
 

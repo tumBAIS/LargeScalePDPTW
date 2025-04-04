@@ -2,8 +2,9 @@
 
 use std::path::Path;
 
-use clap::Parser;
+use clap::{CommandFactory, FromArgMatches};
 use log::info;
+use os_str_bytes::OsStrBytesExt;
 use rand::random;
 use took::Timer;
 
@@ -42,7 +43,17 @@ mod ages;
 fn main() -> anyhow::Result<()> {
     env_logger::init();
 
-    let args = cli::ProgramArguments::parse();
+    let args = argfile::expand_args_from(
+        std::env::args_os(),
+        argfile::parse_fromfile,
+        argfile::PREFIX,
+    )?;
+    let args = cli::ProgramArguments::from_arg_matches(
+        &cli::ProgramArguments::command()
+            .get_matches_from(args.iter().flat_map(|it| {
+                it.split(" ").into_iter().collect::<Vec<_>>()
+            }))
+    )?;
     info!("{:?}", &args);
 
     let (seed_value, mut rng) = {

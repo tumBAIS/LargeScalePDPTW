@@ -1,0 +1,7 @@
+--solver matching-only
+--matching-mode wsc
+--lp-weight-fn weighted-cost-and-temporal-deviation
+--lp-weight-fn-rho 0.7
+--lp-model-type lp
+--fractional-selection-strategy greedy
+--pooling-kdsp-mode earliest
