@@ -1,4 +1,5 @@
---solver matching-only
+--solver construction-only
+--init matching-kdsp
 --matching-mode wsc
 --lp-weight-fn weighted-cost-and-temporal-deviation
 --lp-weight-fn-rho 0.7
