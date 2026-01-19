@@ -57,8 +57,8 @@ os_str_bytes = "7.1.0"
 # add debug info
 #debug = true
 # enable link-time-optimization
-#lto = true
+lto = true
 # reduce codegen-units
-#codegen-units = 1
+codegen-units = 1
 # disable overflow checks
 #overflow-checks = false
