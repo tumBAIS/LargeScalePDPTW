@@ -29,6 +29,7 @@ nyc/
 |-- ny_2015_01_day-07/
 |-- ny_2015_01_day-08/
 |-- p25/
+|-- p10/
 `-- nyc_graph_distances.csv
 ```
 
@@ -48,6 +49,9 @@ solver, and contain the complete information on the respective files needed for 
 distance matrix file.
 
 `p25/` contains the reduced, mid-sized instances generated for the computational analysis. The folder structure
+follows the same logic as for the complete instances, however, only the time frame between 6-7pm was generated.
+
+`p10/` contains the reduced, smaller-sized instances generated for the parameter tuning. The folder structure
 follows the same logic as for the complete instances, however, only the time frame between 6-7pm was generated.
 
 ### `pdptw`
